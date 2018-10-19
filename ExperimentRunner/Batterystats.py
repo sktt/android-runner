@@ -82,8 +82,9 @@ class Batterystats(Profiler):
         # Estimate total consumption
         # charge is given in mAh
         charge = device.shell('dumpsys batterystats | grep "Computed drain:"').split(',')[1].split(':')[1]
+        # voltage is in mV
         volt = device.shell('dumpsys batterystats | grep "volt="').split('volt=')[1].split()[0]
-        energy_consumed_Wh = float(charge) * float(volt) / 1000.0
+        energy_consumed_Wh = float(charge) * float(volt) / 1000.0 / 1000.0
         energy_consumed_J = energy_consumed_Wh * 3600.0
 
         # Wait for Systrace file finalisation before parsing
@@ -98,7 +99,7 @@ class Batterystats(Profiler):
             writer.writerow(systrace_results)
 
         with open(op.join(paths.OUTPUT_DIR, 'android',
-                          'energy_consumed_Joule.txt')) as out:
+                          'energy_consumed_Joule.txt'), 'a') as out:
             out.write('{}\n'.format(energy_consumed_J))
 
         # Remove log files
