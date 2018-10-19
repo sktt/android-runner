@@ -39,7 +39,6 @@ class WebExperiment(Experiment):
         browser = args[0]
         browser.start(device)
         time.sleep(5)
-        self.scripts.run('after_launch', device, device.id, device.current_activity())
 
     def interaction(self, device, path, run, *args, **kwargs):
         browser = args[0]
@@ -51,7 +50,6 @@ class WebExperiment(Experiment):
         time.sleep(self.duration)
 
     def after_run(self, device, path, run, *args, **kwargs):
-        self.scripts.run('before_close', device, device.id, device.current_activity())
         browser = args[0]
         browser.stop(device, clear_data=True)
         time.sleep(3)
